@@ -1,0 +1,5 @@
+.emacs.desktop*
+__pycache__/
+bulkfood_v8.py
+model_v8.py
+
