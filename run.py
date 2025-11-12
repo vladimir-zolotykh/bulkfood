@@ -1,6 +1,48 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
+"""
+>>> raisins = LineItem('Golden raisins', 10, 6.95)
+>>> raisins.weight, raisins.description, raisins.price
+(10, 'Golden raisins', 6.95)
+>>> raisins.subtotal()
+69.5
+>>> raisins.weight = -20
+Traceback (most recent call last):
+    ...
+ValueError: -20 must be > 0
+>>> raisins.weight
+10
+>>> raisins = LineItem('Golden raisins', 10, 6.95)
+>>> dir(raisins)[:3]
+['NonBlank#description', 'Quantity#price', 'Quantity#weight']
+>>> LineItem.description.storage_name
+'NonBlank#description'
+>>> raisins.description
+'Golden raisins'
+>>> getattr(raisins, 'NonBlank#description')
+'Golden raisins'
+>>> LineItem.weight  # doctest: +ELLIPSIS
+<model_v8.Quantity object at 0x...>
+>>> LineItem.weight.storage_name
+'Quantity#weight'
+>>> br_nuts = LineItem('Brazil Nuts', 10, 34.95)
+>>> br_nuts.description = ' '
+Traceback (most recent call last):
+    ...
+ValueError: value cannot be empty or blank
+>>> void = LineItem('', 1, 1)
+Traceback (most recent call last):
+    ...
+ValueError:  str must be None
+>>> for name in LineItem.iter_fields():
+...     print(name)
+...
+description
+weight
+price
+
+"""
 from typing import Iterator, Any
 from abc import ABC, abstractmethod
 
@@ -71,12 +113,15 @@ class LineItem(Entity):
         self.weight = weight
         self.price = price
 
+    def subtotal(self):
+        return self.weight * self.price
+
 
 def as_tuple(line_item: LineItem) -> tuple[Any, ...]:
     return tuple(line_item.__dict__.values())
 
 
 if __name__ == "__main__":
-    raisins = LineItem("Golden raisins", 10, 6.95)
-    print(as_tuple(raisins))
-    print(vars(raisins))
+    import doctest
+
+    doctest.testmod()
