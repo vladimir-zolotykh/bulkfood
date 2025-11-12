@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
+from typing import Iterator, Any
 from abc import ABC, abstractmethod
 
 
@@ -14,7 +15,7 @@ class Descriptor:
         return getattr(instance, self.storage_name)
 
     def __set__(self, instance, value):
-        value = self.validate(instance, value)
+        value = self.validate(value)
         setattr(instance, self.storage_name, value)
 
 
@@ -53,7 +54,7 @@ class EntityMeta(type):
 
 class Entity(metaclass=EntityMeta):
     @classmethod
-    def iter_fields(cls):
+    def iter_fields(cls) -> Iterator[str]:
         for name in cls._field_names:
             yield name
 
@@ -69,5 +70,10 @@ class LineItem(Entity):
         self.price = price
 
 
+def as_tuple(line_item: LineItem) -> tuple[Any, ...]:
+    return tuple(line_item.__dict__.values())
+
+
 if __name__ == "__main__":
     raisins = LineItem("Golden raisins", 10, 6.95)
+    print(as_tuple(raisins))
