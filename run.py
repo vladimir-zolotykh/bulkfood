@@ -6,8 +6,10 @@ from abc import ABC, abstractmethod
 
 
 class Descriptor:
-    def __set_name__(self, owner, name):
-        self.storage_name = f"{self.__class__.__name__}#{name}"
+    # def __set_name__(self, owner, name):
+    #     self.storage_name = f"{self.__class__.__name__}#{name}"
+    def __init__(self, name=None):
+        self.storage_name = name
 
     def __get__(self, instance, owner):
         if not instance:
@@ -47,7 +49,7 @@ class EntityMeta(type):
         for name, value in clsdict.items():
             if isinstance(value, Descriptor):
                 descriptor = value
-                descriptor.name = name
+                descriptor.storage_name = f"{descriptor.__class__.__name__}#{name}"
                 fields.append(name)
         setattr(cls, "_field_names", fields)
 
@@ -77,3 +79,4 @@ def as_tuple(line_item: LineItem) -> tuple[Any, ...]:
 if __name__ == "__main__":
     raisins = LineItem("Golden raisins", 10, 6.95)
     print(as_tuple(raisins))
+    print(vars(raisins))
