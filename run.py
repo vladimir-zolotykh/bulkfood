@@ -23,14 +23,14 @@ ValueError: -20 must be > 0
 >>> getattr(raisins, 'NonBlank#description')
 'Golden raisins'
 >>> LineItem.weight  # doctest: +ELLIPSIS
-<model_v8.Quantity object at 0x...>
+<__main__.Quantity object at 0x...>
 >>> LineItem.weight.storage_name
 'Quantity#weight'
 >>> br_nuts = LineItem('Brazil Nuts', 10, 34.95)
 >>> br_nuts.description = ' '
 Traceback (most recent call last):
     ...
-ValueError: value cannot be empty or blank
+ValueError:  str must be None
 >>> void = LineItem('', 1, 1)
 Traceback (most recent call last):
     ...
