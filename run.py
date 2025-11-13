@@ -30,11 +30,11 @@ ValueError: -20 must be > 0
 >>> br_nuts.description = ' '
 Traceback (most recent call last):
     ...
-ValueError:  str must be None
+ValueError: str must be not empty or blank
 >>> void = LineItem('', 1, 1)
 Traceback (most recent call last):
     ...
-ValueError:  str must be None
+ValueError: str must be not empty or blank
 >>> for name in LineItem.iter_fields():
 ...     print(name)
 ...
@@ -80,7 +80,7 @@ class NonBlank(Validated):
     def validate(self, value):
         value = value.strip()
         if not value:
-            raise ValueError(f"{value} str must be None")
+            raise ValueError("str must be not empty or blank")
         return value
 
 
